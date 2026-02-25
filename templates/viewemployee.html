@@ -1,0 +1,77 @@
+{% extends 'index.html' %}
+{% block content %}
+    <div class=" bg-secondary rounded align-items-center justify-content-center mx-0">
+    <div class="col-sm-12">
+        <div class="bg-secondary rounded h-100 p-4">
+            <h6 class="mb-4">View Employee</h6>
+            <table class="table table-borderless">
+                <button id="downloadPDF" class="btn btn-primary mb-3">
+    <i class="fa fa-download"></i> Download PDF
+</button>
+
+                <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Date of Birth</th>
+                        <th scope="col">Mobile Number</th>
+                        <th scope="col">Age</th>
+                        <th scope="col">Employee ID</th>
+                        <th scope="col">Position</th>
+                        <th scope="col">Joining Date</th>
+                        <th scope="col">Experience</th>
+                        <th scope="col">Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for i in e %}
+                    <tbody>
+                        <tr>
+                        <td>{{ i.empname }}</td>
+                        <td>{{ i.empemail }}</td>
+                        <td>{{ i.empdob }}</td>
+                        <td>{{ i.empmbno }}</td>
+                        <td>{{ i.empage }}</td>
+                        <td>{{ i.empid }}</td>
+                        <td>{{ i.emppos }}</td>
+                        <td>{{ i.empjndt }}</td>
+                        <td>{{ i.empexp }}</td>
+                        <td><a href="{% url 'deleteemp' id=i.id %}" ><button type="button" class="btn btn-sm btn-outline-danger m-0" ><i class="fa fa-times"></i></button></a></td>
+                        </tr>
+                    </tbody>
+                    
+                    {% empty %}
+                    <tbody>
+                        
+                        <tr>
+                        <td>DATA HAS NO LIST</td>
+                        </tr>
+                    </tbody>
+                    {% endfor %}
+            </table>
+        </div>
+    </div>
+    </div>
+<script>
+    document.getElementById("downloadPDF").addEventListener("click", function () {
+        const { jsPDF } = window.jspdf;
+
+        // Target only the table container
+        const table = document.querySelector(".table");
+
+        html2canvas(table, { scale: 2 }).then(canvas => {
+            const imgData = canvas.toDataURL("image/png");
+            const pdf = new jsPDF('l', 'mm', 'a4'); // landscape mode
+            const imgProps = pdf.getImageProperties(imgData);
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+            pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+            pdf.save("employees.pdf");
+        });
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+{% endblock %}

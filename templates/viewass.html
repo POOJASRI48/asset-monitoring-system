@@ -1,0 +1,70 @@
+{% extends 'index.html' %}
+{% block content %}
+    <div class=" bg-secondary rounded align-items-center justify-content-center mx-0">
+    <div class="col-sm-12">
+            <div class="bg-secondary rounded h-100 p-4">
+            <h6 class="mb-4">View Assests</h6>
+            <table class="table table-borderless">
+                <thead>
+                    <tr>
+                        <th scope="col">Employee Name</th>
+                        <th scope="col">System Type</th>
+                        <th scope="col">Given Date</th>
+                        <th scope="col">Return Date</th>
+                    </tr>
+                </thead>
+                    <tbody>
+                    {% for i in ass %}
+                            <tr>
+                            <td>{{ i.empls }}</td>
+                            <td>{{ i.systy }}</td>
+                            <td>{{ i.gdt }}</td>
+                            <td>{{ i.rdt }}</td>
+                                <td><a href="{% url 'viewfulldetails' id=i.id %}" ><button type="button" class="btn btn-sm btn-outline-primary  pt-sm-0" style="float: right"> Check the  {{ i.systy }} full details </button></a></td>
+                                <td><a href="{% url 'addass' id=i.id %}" ><button type="button" class="btn btn-sm btn-outline-primary  pt-sm-0" style="float: right"> Add Accessories</button></a></td>
+                            <td><a href="{% url 'returnprocess' id=i.id %}" ><button type="button" class="btn btn-sm  btn-outline-primary pt-sm-0" style="float: right">Return</button></a></td>
+                            </tr>
+                        </tbody>
+                    {% empty %}
+                    <tbody>
+                            <tr>
+                                <td>NO DATA LIST</td>
+                            </tr>
+                        </tbody>
+                    {% endfor %}
+            </table>
+        </div>
+        <div class="bg-secondary rounded h-100 p-4">
+        <h6 class="mb-4">View Assest -> Other Accessories</h6>
+        <table class="table table-borderless">
+            <thead>
+                <tr>
+                    <th scope="col">Employee Name</th>
+                    <th scope="col">Other Accessories</th>
+                    <th scope="col">Given Date</th>
+                    <th scope="col">Return Date</th>
+                </tr>
+            </thead>
+                <tbody>
+                {% for i in oass %}
+                        <tr>
+                        <td>{{ i.empls }}</td>
+                        <td>{{ i.otls }}</td>
+                        <td>{{ i.gdt }}</td>
+                        <td>{{ i.rdt }}</td>
+                            <td><a href="{% url 'returnempother' id=i.id %}" ><button type="button" class="btn btn-sm  btn-outline-primary pt-sm-0" style="float: right">Return</button></a></td>
+                        </tr>
+                    </tbody>
+                {% empty %}
+                <tbody>
+                        <tr>
+                            <td>NO DATA LIST</td>
+                        </tr>
+                    </tbody>
+                {% endfor %}
+        </table>
+    </div>
+    </div>
+    </div>
+
+{% endblock %}

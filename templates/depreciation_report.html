@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Asset Depreciation</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', Roboto, sans-serif;
+      background-color: #f5f7f9;
+      color: #343a40;
+    }
+    .navbar-brand {
+      font-weight: 600;
+      color: #fff;
+    }
+    .card {
+      border: none;
+      border-radius: 0.75rem;
+      box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.08);
+    }
+    .table th {
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      color: #6c757d;
+      background-color: #f8f9fa;
+    }
+    .status-badge {
+      padding: 0.4rem 0.7rem;
+      border-radius: 0.35rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center" href="#">
+        <i class="bi bi-graph-up me-2"></i> AssetDepreciator 
+      </a>
+    </div>
+  </nav>
+
+  <!-- Header -->
+  <div class="container mb-4">
+    <h1 class="fw-bold text-dark">Asset Depreciation Report</h1>
+    <p class="text-muted mb-0">As of <span id="current-date">{{ as_of }}</span></p>
+  </div>
+
+  <!-- Table Section -->
+  <div class="container pb-5">
+    <div class="card">
+      <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Asset Summary</h5>
+        <button id="download-btn" class="btn btn-sm btn-outline-primary">
+          <i class="bi bi-file-earmark-arrow-down me-1"></i> Download PDF
+        </button>
+      </div>
+      <div class="card-body" id="table-section">
+        <div class="table-responsive">
+          <table class="table table-hover align-middle">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Employee</th>
+                <th>Asset Type</th>
+                <th>Purchase Date</th>
+                <th class="text-end">Cost (₹)</th>
+                <th class="text-end">Current Value (₹)</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for r in rows %}
+              <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ r.employee }}</td>
+                <td>{{ r.type }}</td>
+                <td>{{ r.purchase_date }}</td>
+                <td class="text-end fw-bold">{{ r.cost }}</td>
+                <td class="text-end text-success fw-bold">{{ r.nbv }}</td>
+                <td>
+                  {% if r.years_used > r.life %}
+                  <span class="badge bg-danger status-badge">Expired</span>
+                  {% else %}
+                  <span class="badge bg-success status-badge">Active</span>
+                  {% endif %}
+                </td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="7" class="text-center py-4 text-muted">
+                  <i class="bi bi-inbox display-4 d-block mb-2"></i>
+                  No asset records available.
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chart Section -->
+  <div class="container mt-5">
+    <div class="card p-4">
+      <h5 class="mb-3">Asset Value Comparison</h5>
+      <canvas id="depreciationChart" height="120"></canvas>
+    </div>
+  </div>
+
+  <script>
+    // Chart.js setup
+    const ctx = document.getElementById('depreciationChart').getContext('2d');
+    const assetLabels = [{% for r in rows %}'{{ r.type }}',{% endfor %}];
+    const assetValues = [{% for r in rows %}{{ r.nbv }},{% endfor %}];
+    const assetCost = [{% for r in rows %}{{ r.cost }},{% endfor %}];
+
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: assetLabels,
+        datasets: [
+          { label: 'Cost (₹)', data: assetCost, backgroundColor: 'rgba(54,162,235,0.6)' },
+          { label: 'Current Value (₹)', data: assetValues, backgroundColor: 'rgba(75,192,192,0.6)' }
+        ]
+      },
+      options: {
+        responsive: true,
+        scales: { y: { beginAtZero: true } }
+      }
+    });
+
+    // PDF Download (only the table)
+    document.getElementById("download-btn").addEventListener("click", () => {
+      const table = document.getElementById("table-section");
+      const opt = {
+        margin: 0.5,
+        filename: 'Asset_Depreciation_Table.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+      };
+      html2pdf().set(opt).from(table).save();
+    });
+  </script>
+</body>
+</html>

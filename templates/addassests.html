@@ -1,0 +1,83 @@
+{% extends 'index.html' %}
+{% block content %}
+    <div class=" bg-secondary rounded align-items-center justify-content-center mx-0">
+    <div class="col-sm-12 col-xl-6">
+        <div class="bg-secondary rounded h-100 p-4">
+            <h6 class="mb-4">Add Assests</h6>
+            <form method="post">
+             {% csrf_token %}
+                <div class="row mb-3">
+                    <label for="inputEmail3" class="col">Employee List Menu</label>
+                    <div class="col-sm-9">
+                        <select class="form-select mb-3" aria-label="Default select example" name="empls" required>
+                                <option selected>Select Employee Name menu</option>
+                                {% for i in emp %}
+                                <option value={{ i.empname }}>{{ i.empname }}</option>
+                                {% endfor %}
+                            </select>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label for="inputEmail3" class="col">System Type</label>
+                    <div class="col-sm-9">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="computer" id="inlineRadio1"
+                                value="option1" onclick="document.getElementById('comp').style.display='block';document.getElementById('lap').style.display='none'" required>
+                            <label class="form-check-label" for="inlineRadio1">Computer</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="computer" id="inlineRadio2"
+                                value="option2" onclick="document.getElementById('lap').style.display='block';document.getElementById('comp').style.display='none'" required>
+                            <label class="form-check-label" for="inlineRadio2">Laptop</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3" style="display: none" id="comp">
+                    <label for="inputEmail3" class="col">Computer List Menu</label>
+                    <div class="col-sm-9">
+                        <select class="form-select form-select-sm mb-3"  aria-label=".form-select-sm example" name="cmpls">
+                                <option selected value="None">Select Computer menu</option>
+                                {% for i in com %}
+                                <option value={{ i.comname }}>{{ i.comname }}</option>
+                                {% endfor %}
+                            </select>
+                    </div>
+                </div>
+                <div class="row mb-3" style="display: none" id="lap">
+                    <label for="inputEmail3" class="col">Laptop List Menu</label>
+                    <div class="col-sm-9">
+                        <select class="form-select form-select-sm mb-3"   aria-label=".form-select-sm example" name="lpls">
+                                <option selected value="None">Select Laptop menu</option>
+                                {% for i in lap %}
+                                <option value={{ i.lapname }}>{{ i.lapname }}</option>
+                                {% endfor %}
+                            </select>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label for="inputEmail3" class="col">Given Date</label>
+                    <div class="col-sm-9">
+                        <input type="date" class="form-control" placeholder="Given Date and Time" aria-label="Username" aria-describedby="basic-addon1" name="gdt" required style="background-color: #1e2125">
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label for="inputEmail3" class="col">Return Date</label>
+                    <div class="col-sm-9">
+                        <input type="date" class="form-control" placeholder="Given Date and Time" aria-label="Username" aria-describedby="basic-addon1" name="rdt" required style="background-color: #1e2125">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    <div class="col-sm-12 col-xl-6">
+        <div class="bg-secondary rounded h-100 p-4">
+            <div class="m-n2">
+                <button type="button" class="btn btn-outline-primary m-2"><a href ="{% url 'addotherass' %}" style="color:#FFFFFF;"><i class="fa fa-cogs"></i> Assest Other Accessories </a></button>
+           </div>
+        </div>
+    </div>
+    </div>
+    </div>
+
+{% endblock %}
+

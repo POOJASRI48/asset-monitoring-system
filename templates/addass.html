@@ -1,0 +1,67 @@
+{% extends 'index.html' %}
+{% block content %}
+    <div class=" bg-secondary rounded align-items-center justify-content-center mx-0">
+            <a href="{% url 'viewass' %}" ><button type="button" class="btn btn-sm   btn-outline-primary m-2" style="float: right"><i class="fa fa-arrow-left"></i> View Assests</button></a>
+    <div class="col-sm-12 col-xl-6">
+        <div class="bg-secondary rounded h-100 p-4">
+            <h6 class="mb-4">Add Accessories</h6>
+            <form method="post">
+             {% csrf_token %}
+               {% if emp %}
+                   <div class="row mb-3">
+                    <label for="inputEmail3" class="col">Employee List Menu</label>
+                    <div class="col-sm-9">
+                        <select class="form-select mb-3" aria-label="Default select example" name="empls" required>
+                                <option selected>Select Employee Name menu</option>
+                                {% for i in emp %}
+                                <option value={{ i.empname }}>{{ i.empname }}</option>
+                                {% endfor %}
+                            </select>
+                    </div>
+                </div>
+               {% elif em %}
+                   <div class="row mb-3">
+                    <label for="inputEmail3" class="col">Given Date</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" value="{{ em }}" placeholder="Employee Name" aria-label="Username" aria-describedby="basic-addon1" name="empls" required>
+                    </div>
+                </div>
+               {% endif %}
+                <div class="row mb-3">
+                    <label for="inputEmail3" class="col">Other Accessories</label>
+                    <div class="col-sm-9">
+                        <select class="form-select form-select-sm mb-3" aria-label=".form-select-sm example" name="otls">
+                                <option selected>Select Other Accessories menu</option>
+                                {% for i in oth %}
+                                    {% if i.keyboard %}
+                                        <option value="{{ i.keyboard }}">{{ i.keyboard }}</option>
+                                    {% elif i.mouse %}
+                                        <option value="{{ i.mouse }}">{{ i.mouse }}</option>
+                                    {% elif i.other %}
+                                        <option value="{{ i.other }}">{{ i.other }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label for="inputEmail3" class="col">Given Date</label>
+                    <div class="col-sm-9">
+                        <input type="date" class="form-control" placeholder="Given Date and Time" aria-label="Username" aria-describedby="basic-addon1" name="gdt" required style="background-color: #1e2125">
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label for="inputEmail3" class="col">Return Date</label>
+                    <div class="col-sm-9">
+                        <input type="date" class="form-control" placeholder="Given Date and Time" aria-label="Username" aria-describedby="basic-addon1" name="rdt" required style="background-color: #1e2125">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+    </div>
+
+{% endblock %}
+

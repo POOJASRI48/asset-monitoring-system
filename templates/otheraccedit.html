@@ -1,0 +1,74 @@
+{% extends 'index.html' %}
+{% block content %}
+    <div class=" bg-secondary rounded align-items-center justify-content-center mx-0">
+        <a href="{% url 'otheracc' %}" ><button type="button" class="btn btn-sm btn-sm-square  btn-outline-primary m-2" style="float: left"><i class="fa fa-arrow-left"></i></button></a>
+        <div class="col-sm-12">
+        <div class="bg-secondary rounded h-100 p-lg-5">
+            <h6 class="mb-4">Add Other Accessories</h6>
+            <form method="post">
+                {% csrf_token %}
+               <div class="row mb-3">
+                  <label for="inputEmail3" class="col">Other Accessories Type</label>
+                        <div class="col-sm-9">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="computer" id="inlineRadio1"
+                                    value="option1" onclick="document.getElementById('keyboard').style.display='block';document.getElementById('mouse').style.display='none';document.getElementById('other').style.display='none'" required>
+                                <label class="form-check-label" for="inlineRadio1">Keyboard</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="computer" id="inlineRadio2"
+                                    value="option2" onclick="document.getElementById('mouse').style.display='block';document.getElementById('keyboard').style.display='none';document.getElementById('other').style.display='none' " required>
+                                <label class="form-check-label" for="inlineRadio2">Mouse</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="computer" id="inlineRadio2"
+                                    value="option2" onclick="document.getElementById('other').style.display='block';document.getElementById('keyboard').style.display='none';document.getElementById('mouse').style.display='none' " required>
+                                <label class="form-check-label" for="inlineRadio2">Other Accessories</label>
+                            </div>
+                        </div>
+               </div>
+              <div class="row mb-3" style="display: none" id="keyboard">
+                    <label for="inputEmail3" class="col">Keyboard Name</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" id="floatingInput"
+                    placeholder="Keyboard Name" name="keyboard">
+                    </div>
+              </div>
+              <div class="row mb-3" style="display: none" id="mouse">
+                    <label for="inputEmail3" class="col">Mouse Name</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" id="floatingInput"
+                    placeholder="mouse Name" name="mouse">
+                    </div>
+              </div>
+              <div class="row mb-3" style="display: none" id="other">
+                    <label for="inputEmail3" class="col">Other Accessories Name</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" id="floatingInput"
+                    placeholder="other Accessories Name" name="other">
+                    </div>
+              </div>
+{#            <div class="form-floating mb-3">#}
+{#                <input type="text" class="form-control" id="floatingInput"#}
+{#                    placeholder="Keyboard Name" name="keyboard">#}
+{#                <label for="floatingInput">Keyboard Name</label>#}
+{#            </div>#}
+
+{#            <div class="form-floating mb-3">#}
+{#                <input type="text" class="form-control" id="floatingInput"#}
+{#                    placeholder="Mouse Name" name="mouse">#}
+{#                <label for="Mouse Name">Mouse Name</label>#}
+{#            </div>#}
+
+{#            <div class="form-floating">#}
+{#                <textarea class="form-control" placeholder="Any Other Accessories"#}
+{#                    id="floatingTextarea" style="height: 150px;" name="other"></textarea>#}
+{#                <label for="floatingTextarea">Any Other Accessories</label>#}
+{#            </div>#}
+                <button type="submit" class="btn btn-success rounded-pill m-2">Submit</button>
+            </form>
+        </div>
+    </div>
+    </div>
+
+{% endblock %}

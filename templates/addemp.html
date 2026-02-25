@@ -1,0 +1,55 @@
+{% extends 'index.html' %}
+
+{% block content %}
+    <div class="col-sm-12 ">
+        <div class="bg-secondary rounded h-100 p-4">
+            <h6 class="mb-4">Add Employee</h6>
+            <form method="post">
+                {% csrf_token %}
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon1">@</span>
+                <input type="text" class="form-control" placeholder="Username" aria-label="Username"
+                    aria-describedby="basic-addon1" name="empname" required>
+            </div>
+            <div class="input-group mb-3">
+                <input type="email" class="form-control" placeholder="Email"
+                    aria-label="Recipient's username" aria-describedby="basic-addon2" name="empemail" required>
+                <span class="input-group-text" id="basic-addon2">@example.com</span>
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon1">Date Of Birth</span>
+                <input type="date" class="form-control" placeholder="Date Of Birth" aria-label="Username"
+                    aria-describedby="basic-addon1" name="empdob" style="background-color: #1e2125" required>
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon1">+91</span>
+                <input type="number" class="form-control" placeholder="Mobile Number" aria-label="Username"
+                    aria-describedby="basic-addon1" name="empmbno" required>
+            </div>
+            <div class="input-group mb-3">
+                <input type="number" class="form-control" placeholder="Age" aria-label="Username"
+                    aria-describedby="basic-addon1" name="empage" required>
+            </div>
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="Employee ID" aria-label="Username"
+                    aria-describedby="basic-addon1" name="empid" required>
+            </div>
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="Position" aria-label="Username"
+                    aria-describedby="basic-addon1" name="emppos">
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon1">Joining Date</span>
+                <input type="Date" class="form-control" placeholder="Joining Date" aria-label="Username"
+                    aria-describedby="basic-addon1" name="empjndt" style="background-color: #1e2125" required>
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon1">eg : 1.5 yrs</span>
+                <input type="text" class="form-control" placeholder="Experience" aria-label="Username"
+                    aria-describedby="basic-addon1" name="empexp" required>
+            </div>
+            <button type="submit" class="btn btn-danger m-2">Submit</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

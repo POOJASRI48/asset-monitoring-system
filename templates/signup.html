@@ -1,0 +1,219 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>DarkPan - Bootstrap 5 Admin Template</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Roboto:wght@500;700&display=swap" rel="stylesheet"> 
+    
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="{% static 'lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+    <link href="{% static 'lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css' %}" rel="stylesheet" />
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <style>
+        body{
+            background-color:black;
+        }
+        .invalid {
+  color: red;
+}
+
+.invalid:before {
+  position: relative;
+  left: -35px;
+  content: "✖";
+}
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid position-relative d-flex p-0">
+        <!-- Spinner Start -->
+        <div id="spinner" class="show bg-dark position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        <!-- Spinner End id="floatingPassword"-->
+
+
+        <!-- Sign Up Start -->
+        <div class="container-fluid">
+            <div class="row h-100 align-items-center justify-content-center" style="min-height: 100vh;">
+                <div class="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-4">
+                    <div class="bg-secondary rounded p-4 p-sm-5 my-4 mx-3">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <a href="{% url 'index' %}" class="">
+                                <h3 class="text-primary"><i class="fa fa-user-circle"></i>  AMS</h3>
+                            </a>
+                            <h3>Sign Up</h3>
+                        </div>
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="floatingText" placeholder="username" name="user" required>
+                                <label for="floatingText">Username</label>
+                            </div>
+
+                            <div class="form-floating mb-3">
+                                <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" name="email" required>
+                                <label for="floatingInput">Email address</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="floatingText" placeholder="Mobile Number" name="mobno" required>
+                                <label for="floatingText">Mobile Number</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="floatingText" placeholder="Position" name="postion" required>
+                                <label for="floatingText">Admin Position</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="floatingText" placeholder="Staff ID" name="staffid" required>
+                                <label for="floatingText">Admin ID</label>
+                            </div>
+                            <div class="form-floating mb-4">
+
+                                <input type="password" class="form-control"  placeholder="Password" name="pasw"  id="psw" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" required>
+                                <label for="floatingPassword">Password</label>
+                                <br>
+                                <div class="d-flex align-items-center justify-content-between mb-4">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="exampleCheck1" onclick="myFunction()">
+                                    <label class="form-check-label" for="exampleCheck1">Show Password</label>
+                                </div>
+                            </div>
+                                <div id="message" style="display: none">
+                                    <h5>Password must contain the following:</h5>
+                                    <p id="letter" class="invalid">A <b>lowercase</b> letter</p>
+                                    <p id="capital" class="invalid">A <b>capital (uppercase)</b> letter</p>
+                                    <p id="number" class="invalid">A <b>number</b></p>
+                                    <p id="length" class="invalid">Minimum <b>8 characters</b></p>
+                                </div>
+                            </div>
+
+                            <div class="d-flex align-items-center justify-content-between mb-4">
+                                <div class="form-check">
+
+                                    <a class="form-check-label" for="exampleCheck1"><input type="checkbox" class="form-check-input" id="exampleCheck1" required>I agree to terms and Condition</a>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary py-3 w-100 mb-4">Sign Up</button>
+                        </form>
+                        <p class="text-center mb-0">Already have an Account? <a href="{% url 'login' %}">Sign In</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Sign Up End -->
+    </div>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'lib/chart/chart.min.js' %}"></script>
+    <script src="{% static 'lib/easing/easing.min.js' %}"></script>
+    <script src="{% static 'lib/waypoints/waypoints.min.js' %}"></script>
+    <script src="{% static 'lib/owlcarousel/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'lib/tempusdominus/js/moment.min.js' %}"></script>
+    <script src="{% static 'lib/tempusdominus/js/moment-timezone.min.js' %}"></script>
+    <script src="{% static 'lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.6.5/sweetalert2.all.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        function myFunction() {
+          var x = document.getElementById("psw");
+          if (x.type === "password") {
+            x.type = "text";
+          } else {
+            x.type = "password";
+          }
+        }
+    </script>
+    <script>
+        var myInput = document.getElementById("psw");
+        var letter = document.getElementById("letter");
+        var capital = document.getElementById("capital");
+        var number = document.getElementById("number");
+        var length = document.getElementById("length");
+
+        // When the user clicks on the password field, show the message box
+        myInput.onfocus = function() {
+          document.getElementById("message").style.display = "block";
+        }
+
+        // When the user clicks outside of the password field, hide the message box
+        myInput.onblur = function() {
+          document.getElementById("message").style.display = "none";
+        }
+
+        // When the user starts to type something inside the password field
+        myInput.onkeyup = function() {
+          // Validate lowercase letters
+          var lowerCaseLetters = /[a-z]/g;
+          if(myInput.value.match(lowerCaseLetters)) {
+            letter.classList.remove("invalid");
+            letter.classList.add("valid");
+          } else {
+            letter.classList.remove("valid");
+            letter.classList.add("invalid");
+          }
+
+          // Validate capital letters
+          var upperCaseLetters = /[A-Z]/g;
+          if(myInput.value.match(upperCaseLetters)) {
+            capital.classList.remove("invalid");
+            capital.classList.add("valid");
+          } else {
+            capital.classList.remove("valid");
+            capital.classList.add("invalid");
+          }
+
+          // Validate numbers
+          var numbers = /[0-9]/g;
+          if(myInput.value.match(numbers)) {
+            number.classList.remove("invalid");
+            number.classList.add("valid");
+          } else {
+            number.classList.remove("valid");
+            number.classList.add("invalid");
+          }
+
+          // Validate length
+          if(myInput.value.length >= 8) {
+            length.classList.remove("invalid");
+            length.classList.add("valid");
+          } else {
+            length.classList.remove("valid");
+            length.classList.add("invalid");
+          }
+        }
+
+</script>
+
+
+</body>
+
+</html>
+{% load sweetify %}
+{% sweetify %}

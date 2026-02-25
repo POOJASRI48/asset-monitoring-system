@@ -1,0 +1,50 @@
+{% extends 'index.html' %}
+{% block content %}
+    <div class=" bg-secondary rounded align-items-center justify-content-center mx-0">
+        <a href="{% url 'viewass' %}" ><button type="button" class="btn btn-sm   btn-outline-primary m-2" style="float: right"><i class="fa fa-arrow-left"></i></button></a>
+    <div class="col-sm-12">
+        <div class="bg-secondary rounded h-100 p-4">
+            <h6 class="mb-4">View </h6>
+            <table class="table table-borderless">
+                    <tbody>
+                        {% if com  %}
+                            {% for i in com %}
+                            <tr><th scope="col">Computer Name</th><td>{{ i.comname }}</td></tr>
+                            <tr><th scope="col">Operating System</th><td>{{ i.os }}</td></tr>
+                            <tr><th scope="col">HDD & SDD Varient</th><td>{{ i.hdd }}</td></tr>
+                            <tr><th scope="col">RAM Varient</th><td>{{ i.ram }}</td></tr>
+                            <tr><th scope="col">CPU Company Name and Model</th><td>{{ i.cpnm }}</td></tr>
+                            <tr><th scope="col">CPU Serial Number</th><td>{{ i.cpsn }}</td></tr>
+                            <tr><th scope="col">Monitor Name</th><td>{{ i.monname }}</td></tr>
+                            <tr><th scope="col">Monitor Serial Number</th><td>{{ i.mnsn }}</td></tr>
+                            <tr><th scope="col">Processor and Clock Speed</th><td>{{ i.prcl }}</td></tr>
+                            <tr><th scope="col">Graphics Card Name</th><td>{{ i.grcname }}</td></tr>
+                            <tr><th scope="col">Graphics Card Size Varient</th><td>{{ i.gcs }}</td></tr>
+                            <tr><th scope="col">Keyboard Name</th><td>{{ i.kyname }}</td></tr>
+                            <tr><th scope="col">Mouse Name</th><td>{{ i.msname }}</td></tr>
+                            {% empty %}
+                                <td>NO DATA</td>
+                            {% endfor %}
+                        {% elif lap %}
+                            {% for i in lap %}
+                            <tr><th scope="col">Laptop Name</th><td>{{ i.lapname     }}</td></tr>
+                            <tr><th scope="col">Operating Systeme</th><td>{{ i.los }}</td></tr>
+                            <tr><th scope="col">HDD & SDD Varient</th><td>{{ i.lhdd }}</td></tr>
+                            <tr><th scope="col">RAM Varient</th><td>{{ i.lram }}</td></tr>
+                            <tr><th scope="col">Laptop Color and Model</th><td>{{ i.lcm }}</td></tr>
+                            <tr><th scope="col">Laptop Serial Number</th><td>{{ i.lsn }}</td></tr>
+                            <tr><th scope="col">Processor and Clock Speed</th><td>{{ i.prcl }}</td></tr>
+                            <tr><th scope="col">Graphics Card Name</th><td>{{ i.grcname }}</td></tr>
+                            <tr><th scope="col">Graphics Card Size Varient</th><td>{{ i.gcs }}</td></tr>
+                            <tr><th scope="col">Charger Adepator Name and Voltage</th><td>{{ i.canv }}</td></tr>
+                            {% empty %}
+                                <td>NO DATA</td>
+                            {% endfor %}
+                        {% endif %}
+                    </tbody>
+            </table>
+        </div>
+    </div>
+    </div>
+
+{% endblock %}

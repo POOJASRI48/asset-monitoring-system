@@ -1,0 +1,103 @@
+{% extends 'index.html' %}
+{% block content %}
+    <div class=" bg-secondary rounded align-items-center justify-content-center mx-0">
+        <a href="{% url 'comcat' %}" ><button type="button" class="btn btn-sm btn-sm-square  btn-outline-primary m-2" style="float: left"><i class="fa fa-arrow-left"></i></button></a>
+        <div class="col-sm-12">
+        <div class="bg-secondary rounded h-100 p-lg-5">
+            <h6 class="mb-4">Add Computer</h6>
+            <form method="post">
+                {% csrf_token %}
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="floatingInput"
+                    placeholder="Computer Name" name="comname">
+                <label for="floatingInput">Computer Name</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="floatingInput"
+                    placeholder="Operating System" name="os">
+                <label for="floatingInput">Operating System</label>
+            </div>
+            <div class="form-floating mb-3">
+                <select class="form-select" id="floatingSelect"
+                    aria-label="Floating label select example" name="hdd">
+                    <option selected>HDD & SDD Varient</option>
+                    <option value="250GB">250GB</option>
+                    <option value="500GB">500GB</option>
+                    <option value="1TB">1TB</option>
+                </select>
+                <label for="floatingSelect">Select the HDD and SDD Varient</label>
+            </div>
+             <div class="form-floating mb-5">
+                 <select class="form-select" multiple aria-label="multiple select example" style="height:10%" name='ram'>
+                                <option selected>Open this select RAM Varient</option>
+                                <option value="2GB">2GB</option>
+                                <option value="4GB">4GB</option>
+                                <option value="8GB">8GB</option>
+                                <option value="16GB">16GB</option>
+                                <option value="32GB">32GB</option>
+                 </select>
+            </div>
+             <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="floatingInput"
+                    placeholder="CPU Company Name and Model" name="cpnm">
+                <label for="floatingInput">CPU Company Name and Model</label>
+            </div>
+             <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="floatingInput"
+                    placeholder="CPU Serial Number" name="cpsn">
+                <label for="floatingInput">CPU Serial Number</label>
+            </div>
+             <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="floatingInput"
+                    placeholder="Monitor Name" name="monname">
+                <label for="floatingInput">Monitor Name</label>
+            </div>
+             <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="floatingInput"
+                    placeholder="Monitor Serial Number" name="mnsn">
+                <label for="floatingInput">Monitor Serial Number</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="floatingInput"
+                    placeholder="Processor and Clock Speed" name="prcl">
+                <label for="floatingInput">Processor and Clock Speed</label>
+            </div>
+             <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="floatingInput"
+                    placeholder="Graphics Card Name" name="grcname">
+                <label for="floatingInput">Graphics Card Name</label>
+            </div>
+             <div class="form-floating mb-3">
+                <select class="form-select" id="floatingSelect"
+                    aria-label="Floating label select example" name="gcs">
+                    <option selected>Graphics Card Size Varient</option>
+                    <option value="2GB">2GB</option>
+                    <option value="4GB">4GB</option>
+                    <option value="6GB">6GB</option>
+                    <option value="8GB">8GB</option>
+                    <option value="16GB">16GB</option>
+                </select>
+                <label for="floatingSelect">Select the Graphics Card Size Varient</label>
+            </div>
+             <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="floatingInput"
+                    placeholder="Keyboard" name="kyname">
+                <label for="floatingInput">Keyboard Name</label>
+            </div>
+             <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="floatingInput"
+                    placeholder="Mouse" name="msname">
+                <label for="floatingInput">Mouse Name</label>
+            </div>
+{#            <div class="form-floating">#}
+{#                <textarea class="form-control" placeholder="Leave a comment here"#}
+{#                    id="floatingTextarea" style="height: 150px;"></textarea>#}
+{#                <label for="floatingTextarea">Comments</label>#}
+{#            </div>#}
+                <button type="submit" class="btn btn-success rounded-pill m-2">Submit</button>
+            </form>
+        </div>
+    </div>
+    </div>
+
+{% endblock %}

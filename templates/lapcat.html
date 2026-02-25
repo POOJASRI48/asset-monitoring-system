@@ -1,0 +1,52 @@
+{% extends 'index.html' %}
+
+{% block content %}
+    <div class=" bg-secondary rounded align-items-center justify-content-center mx-0">
+   <a href="{% url 'lapedit' %}" ><button type="button" class="btn btn-lg btn-lg-square  btn-outline-primary m-2" style="float: right"><i class="fa fa-plus"></i></button></a>
+        <div class="container-fluid pt-4 px-4">
+            <div class="bg-secondary rounded h-100 p-0">
+                <h6 class="mb-4">Laptop Details</h6>
+                <table class="table table-hover small">
+                    <thead>
+                        <tr>
+                            <th scope="col">Laptop Name</th>
+                            <th scope="col">Operating Systeme</th>
+                            <th scope="col">HDD & SDD Varient</th>
+                            <th scope="col">RAM Varient</th>
+                            <th scope="col">Laptop Color and Model</th>
+                            <th scope="col">Laptop Serial Number</th>
+                            <th scope="col">Processor and Clock Speed</th>
+                            <th scope="col">Graphics Card Name</th>
+                            <th scope="col">Graphics Card Size Varient</th>
+                            <th scope="col">Charger Adepator Name and Voltage</th>
+                            <th scope="col">Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for i in lap %}
+                        <tr>
+                            <td>{{ i.lapname }}</td>
+                            <td>{{ i.los }}</td>
+                            <td>{{ i.lhdd }}</td>
+                            <td>{{ i.lram }}</td>
+                            <td>{{ i.lcm }}</td>
+                            <td>{{ i.lsn }}</td>
+                            <td>{{ i.prcl }}</td>
+                            <td>{{ i.grcname }}</td>
+                            <td>{{ i.gcs }}</td>
+                            <td>{{ i.canv }}</td>
+                            <td><a href="{% url 'deletelap' id=i.id %}" ><button type="button" class="btn btn-sm btn-outline-danger m-0" ><i class="fa fa-times"></i></button></a></td>
+                        </tr>
+                    </tbody>
+                        {% empty %}
+                        <tbody>
+                        <tr>
+                            <th scope="row">Data Has Empty</th>
+                        </tr>
+                        </tbody>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

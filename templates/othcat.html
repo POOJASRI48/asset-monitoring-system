@@ -1,0 +1,37 @@
+{% extends 'index.html' %}
+
+{% block content %}
+    <div class=" bg-secondary rounded align-items-center justify-content-center mx-0">
+    <a href="{% url 'otheraccedit' %}" ><button type="button" class="btn btn-lg btn-lg-square  btn-outline-primary m-2" style="float: right"><i class="fa fa-plus"></i></button></a>
+        <div class="container-fluid pt-4 px-4">
+            <div class="bg-secondary rounded h-100 p-0">
+                <h6 class="mb-4">Other Accessories Details</h6>
+                <table class="table table-hover small">
+                    {% for i in oth %}
+                        <tr>
+                        {% if i.keyboard %}
+                            <th>Keyboard</th>
+                            <td>{{ i.keyboard }}</td>
+                            <td><a href="{% url 'deleteother' id=i.id %}" ><button type="button" class="btn btn-sm btn-outline-danger m-0" ><i class="fa fa-times"></i></button></a></td>
+                        {% elif i.mouse %}
+                            <th>Mouse</th>
+                            <td>{{ i.mouse }}</td>
+                            <td><a href="{% url 'deleteother' id=i.id %}" ><button type="button" class="btn btn-sm btn-outline-danger m-0" ><i class="fa fa-times"></i></button></a></td>
+                        {% elif i.other %}
+                            <th>Other Accessories</th>
+                            <td>{{ i.other }}</td>
+                            <td><a href="{% url 'deleteother' id=i.id %}" ><button type="button" class="btn btn-sm btn-outline-danger m-0" ><i class="fa fa-times"></i></button></a></td>
+                        {% endif %}
+                        </tr>
+                        {% empty %}
+                        <tbody>
+                        <tr>
+                            <th scope="row">Data Has Empty</th>
+                        </tr>
+                        </tbody>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

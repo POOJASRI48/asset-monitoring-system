@@ -1,0 +1,85 @@
+{% extends 'index.html' %}
+
+{% block content %}
+    <div class="container-fluid p-2">
+        <div class=" bg-secondary rounded align-items-center justify-content-center">
+            <div class="container m-3">
+                <div class="col-md-8 col-sm-6">
+                <div class="panel profile-panel">
+                <div class="panel-heading">
+                <div class="text-left">
+                    <br>
+                  <h2>{{ user }}</h2>
+                </div>
+                </div>
+                <!-- panel body -->
+                <br>
+                {% for i in pro %}
+                <form method="post" action="{% url 'actionupdate' id=i.id %}">
+                    {% csrf_token %}
+                <div class="panel-body">
+                <div class="row">
+                  <div class="profile-edit">
+                    <dl class="dl-horizontal">
+                      <dt class="p-10">Full Name</dt>
+                      <dd>
+                        <div class="fg-line">
+                          <input type="text" class="form-control" placeholder="username" name="user" value="{{ i.user }}">
+                        </div>
+                      </dd>
+                    <dl class="dl-horizontal">
+                      <dt class="p-10">Email</dt>
+                      <dd>
+                        <div class="fg-line">
+                          <input type="text" class="form-control" style="background-color: black;" title="Email has does not change" value="{{ i.email }}" disabled>
+                        </div>
+                      </dd>
+                    </dl>
+                    <dl class="dl-horizontal">
+                      <dt class="p-10">Phone</dt>
+                      <dd>
+                        <div class="fg-line">
+                          <input type="text" class="form-control" value="{{ i.mobno }}" name="mobno">
+                        </div>
+                      </dd>
+                    </dl>
+                    <dl class="dl-horizontal">
+                      <dt class="p-10">Poistion</dt>
+                      <dd>
+                        <div class="fg-line">
+                          <input type="text" class="form-control" value="{{ i.postion }}" name="postion">
+                        </div>
+                      </dd>
+                    </dl>
+                    <dl class="dl-horizontal">
+                      <dt class="p-10">Staff Id</dt>
+                      <dd>
+                        <div class="fg-line">
+                          <input type="text" class="form-control" value="{{ i.staffid }}" name="staffid">
+                        </div>
+                      </dd>
+                    </dl>
+                    <div class="d-flex align-items-center justify-content-between mb-4">
+                                <div class="form-check">
+                                    <a class="form-check-label" for="exampleCheck1"><input type="checkbox" class="form-check-input" id="exampleCheck1" required>I agree to terms and Condition</a>
+                                </div>
+                    </div>
+                    <div class="m-t-30">
+                      <button class="btn btn-primary btn-sm waves-effect">Update</button>
+                    </div>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+            </form>
+        </div>
+        {% endfor %}
+      <!-- end panel body -->
+    </div>
+  </div>
+</div>
+        </div>
+    </div>
+{% endblock %}

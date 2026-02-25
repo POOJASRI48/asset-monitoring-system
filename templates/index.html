@@ -1,0 +1,565 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Asset Management System</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Roboto:wght@500;700&display=swap" rel="stylesheet"> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="{% static 'lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+    <link href="{% static 'lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css' %}" rel="stylesheet" />
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <style>
+        .stat-card {
+            transition: transform 0.3s;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        .chart-container {
+            position: relative;
+            height: 250px;
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed;
+                height: 100%;
+                z-index: 100;
+                left: -300px;
+                transition: all 0.3s;
+            }
+            .sidebar.active {
+                left: 0;
+            }
+            .content {
+                width: 100%;
+            }
+        }
+        /* Loading indicator for PDF generation */
+        #pdf-loading {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 20px;
+            border-radius: 5px;
+            z-index: 9999;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="pdf-loading">Generating PDF report, please wait...</div>
+    
+    <div class="container-fluid position-relative d-flex p-0">
+        <!-- Spinner Start -->
+        <div id="spinner" class="show bg-dark position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        <!-- Spinner End -->
+
+        <!-- Sidebar Start -->
+        <div class="sidebar pe-4 pb-3">
+            <nav class="navbar bg-secondary navbar-dark">
+                <a href="#" class="navbar-brand mx-4 mb-3">
+                    <h3 class="text-primary"><i class="fa fa-tasks"></i> AMS</h3>
+                </a>
+                {% if user is None %}
+                <div class="d-flex align-items-center ms-4 mb-4">
+                    <div class="position-relative">
+                        <i class='fa fa-user-circle fa-2x'></i>
+                    </div>
+                    <div class="ms-3">
+                        <h6 class="mb-0">Not Signed In</h6>
+                    </div>
+                </div>
+                {% else %}
+                <div class="d-flex align-items-center ms-4 mb-4">
+                    <div class="position-relative">
+                        <i class='fa fa-user-circle fa-2x'></i>
+                        <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
+                    </div>
+                    <div class="ms-3">
+                        <h6 class="mb-0">{{ user }}</h6>
+                        <span>{{ pos }}</span>
+                    </div>
+                </div>
+                {% endif %}
+                <div class="navbar-nav w-100">
+                    <a href="{% url 'index' %}" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-database"></i> Assets</a>
+                        <div class="dropdown-menu bg-transparent border-0">
+                            <a href="{% url 'comcat' %}" class="dropdown-item"><i class="fa fa-desktop"></i> Computer</a>
+                            <a href="{% url 'lapcat' %}" class="dropdown-item"><i class="fa fa-laptop"></i> Laptop</a>
+                            <a href="{% url 'otheracc' %}" class="dropdown-item"><i class="fa fa-suitcase"></i> Other Accessories</a>
+                        </div>
+                    </div>
+                    <a href="{% url 'addemp' %}" class="nav-item nav-link"><i class="fa fa-address-card"></i> Add Employee</a>
+                    <a href="{% url 'dashboard1' %}" class="nav-item nav-link"><i class="fa fa-chart-line"></i> Anomaly Detection</a>
+                    <a href="{% url 'addassests' %}" class="nav-item nav-link"><i class="fa fa-plus-circle"></i> Add Assets</a>
+                    <a href="{% url 'viewemployee' %}" class="nav-item nav-link"><i class="fa fa-id-badge"></i> View Employee</a>
+                    <a href="{% url 'viewass' %}" class="nav-item nav-link"><i class="fa fa-eye"></i> View Assets</a>
+                </div>
+            </nav>
+        </div>
+        <!-- Sidebar End -->
+
+        <!-- Content Start -->
+        <div class="content">
+            <!-- Navbar Start -->
+            <nav class="navbar navbar-expand bg-secondary navbar-dark sticky-top px-4 py-0">
+                <a href="#" class="navbar-brand d-flex d-lg-none me-4">
+                    <h2 class="text-primary mb-0"><i class="fa fa-user-edit"></i></h2>
+                </a>
+                <a href="#" class="sidebar-toggler flex-shrink-0">
+                    <i class="fa fa-bars"></i>
+                </a>
+
+                <div class="navbar-nav align-items-center ms-auto">
+                    {% if user is None %}
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                            <i class='fa fa-user-circle'></i>
+                            <span class="d-none d-lg-inline-flex">USER Signin / Signup</span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
+                            <a href="{% url 'login' %}" class="dropdown-item">Signin <span class="bi bi-box-arrow-in-left"></span></a>
+                            <a href="{% url 'register' %}" class="dropdown-item">Signup <i class='fa fa-user-plus'></i></a>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                            <i class='fa fa-user-circle'></i>
+                            <span class="d-none d-lg-inline-flex">{{ user }}</span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
+                            <a href="{% url 'updateprofile' %}" class="dropdown-item">My Profile</a>
+                            <a href="{% url 'logout' %}" class="dropdown-item">Log Out</a>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </nav>
+            <!-- Navbar End -->
+
+            <!-- Main Content Start -->
+            <div class="container-fluid pt-4 px-4">
+                <div class="row g-4">
+                    {% block content %}
+                    <!-- Stats Cards -->
+                    <div class="col-sm-6 col-xl-3">
+                        <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4 stat-card">
+                            <i class='fas fa-user-plus fa-3x text-primary'></i>
+                            <div class="ms-3 text-end">
+                                <p class="mb-2">Total Employee</p>
+                                <h4 class="mb-0">{{ emp }}</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xl-3">
+                        <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4 stat-card">
+                            <i class="fa fa-desktop fa-3x text-primary"></i>
+                            <div class="ms-3 text-end">
+                                <p class="mb-2">Total Computer</p>
+                                <h4 class="mb-0">{{ com }}</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xl-3">
+                        <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4 stat-card">
+                            <i class="fa fa-laptop fa-3x text-primary"></i>
+                            <div class="ms-3 text-end">
+                                <p class="mb-2">Total Laptop</p>
+                                <h4 class="mb-0">{{ lap }}</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xl-3">
+                        <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4 stat-card">
+                            <i class="fa fa-id-card fa-3x text-primary"></i>
+                            <div class="ms-3 text-end">
+                                <p class="mb-2">Total Asset</p>
+                                <h4 class="mb-0">{{ ass }}</h4>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Charts -->
+                    <div class="col-sm-12 col-xl-6">
+                        <div class="bg-secondary text-center rounded p-4">
+                            <div class="d-flex align-items-center justify-content-between mb-4">
+                                <h6 class="mb-0">Assets System</h6>
+                                <button class="btn btn-sm btn-primary" id="downloadPDF">Export PDF</button>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="line-chart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-xl-6">
+                        <div class="bg-secondary text-center rounded p-4">
+                            <div class="d-flex align-items-center justify-content-between mb-4">
+                                <h6 class="mb-0">Computer Stock Analysis</h6>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="computer-chart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-xl-6">
+                        <div class="bg-secondary text-center rounded p-4">
+                            <div class="d-flex align-items-center justify-content-between mb-4">
+                                <h6 class="mb-0">Laptop Stock Analysis</h6>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="laptop-chart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-xl-6">
+                        <div class="bg-secondary text-center rounded p-4">
+                            <div class="d-flex align-items-center justify-content-between mb-4">
+                                <h6 class="mb-0">Other Accessories Analysis</h6>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="other-chart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Additional Widgets -->
+                    <div class="col-sm-12 col-md-6 col-xl-4">
+                        <div class="h-100 bg-secondary rounded p-4">
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <h6 class="mb-0">MAP</h6>
+                            </div>
+                            <iframe class="position-relative rounded w-100 h-100"
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d497511.1140636363!2d79.92880734594413!3d13.04804380239771!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a5265ea4f7d3361%3A0x6e61a70b6863d433!2sChennai%2C%20Tamil%20Nadu!5e0!3m2!1sen!2sin!4v1712744824289!5m2!1sen!2sin"
+                                frameborder="0" allowfullscreen="" aria-hidden="false"
+                                tabindex="0" style="filter: grayscale(100%) invert(92%) contrast(83%); border: 0; height: 300px;"></iframe>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-xl-4">
+                        <div class="h-100 bg-secondary rounded p-4">
+                            <div class="d-flex align-items-center justify-content-between mb-4">
+                                <h6 class="mb-0">Calendar</h6>
+                            </div>
+                            <div id="calender"></div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-xl-4">
+                        <div class="h-100 bg-secondary rounded p-4">
+                            <div class="d-flex align-items-center justify-content-between mb-4">
+                                <h6 class="mb-0">To Do List</h6>
+                            </div>
+                            <form method="post" action="{% url 'todolist' %}">
+                                {% csrf_token %}
+                                <div class="d-flex mb-2">
+                                    <input class="form-control bg-dark border-0" type="text" placeholder="Enter task" name="task" required>
+                                    <button type="submit" class="btn btn-primary ms-2">Add</button>
+                                </div>
+                            </form>
+                            <div class="todo-list">
+                                {% if todo %}
+                                    {% for i in todo %}
+                                    <div class="d-flex align-items-center border-bottom py-2">
+                                        <div class="w-100 ms-3">
+                                            <div class="d-flex w-100 align-items-center justify-content-between">
+                                                <span>{{ i.todo }}</span>
+                                                <a href="{% url 'tododel' id=i.id %}" class="btn btn-sm btn-danger"><i class="fa fa-times"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <div class="d-flex align-items-center border-bottom py-2">
+                                        <div class="w-100 ms-3">
+                                            <div class="d-flex w-100 align-items-center justify-content-between">
+                                                <span>No tasks yet</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endblock %}
+                </div>
+            </div>
+            <!-- Main Content End -->
+
+            <!-- Footer Start -->
+            <div class="container-fluid pt-4 px-4">
+                <div class="bg-secondary rounded-top p-4">
+                    <div class="row">
+                        <div class="col-12 col-sm-6 text-center text-sm-start">
+                            &copy; <a href="#">AMS</a>, All Right Reserved.
+                        </div>
+                        <div class="col-12 col-sm-6 text-center text-sm-end">
+                            Designed By <a href="https://htmlcodex.com">DJANGO</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Footer End -->
+        </div>
+        <!-- Content End -->
+
+        <!-- Back to Top -->
+        <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+    </div>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'lib/chart/chart.min.js' %}"></script>
+    <script src="{% static 'lib/easing/easing.min.js' %}"></script>
+    <script src="{% static 'lib/waypoints/waypoints.min.js' %}"></script>
+    <script src="{% static 'lib/owlcarousel/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'lib/tempusdominus/js/moment.min.js' %}"></script>
+    <script src="{% static 'lib/tempusdominus/js/moment-timezone.min.js' %}"></script>
+    <script src="{% static 'lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.6.5/sweetalert2.all.min.js"></script>
+
+    <script>
+        // Toggle sidebar on mobile
+        document.querySelector('.sidebar-toggler').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('active');
+        });
+
+        // Initialize charts with sample data if context data is not available
+        var asl = {{ asl|default:"[10, 20, 15, 25, 30, 35, 40]" }};
+        var coml = {{ coml|default:"[5, 10, 8, 15, 12, 20, 18]" }};
+        var retcoml = {{ retcoml|default:"[2, 3, 4, 2, 5, 3, 4]" }};
+        var lapl = {{ lapl|default:"[7, 12, 10, 14, 16, 20, 22]" }};
+        var retlapl = {{ retlapl|default:"[1, 2, 3, 2, 4, 3, 5]" }};
+        var otherl = {{ otherl|default:"[3, 5, 7, 6, 9, 11, 13]" }};
+        var retotherl = {{ retotherl|default:"[1, 1, 2, 3, 2, 4, 3]" }};
+        var labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'];
+
+        // Line chart for Assets System
+        var ctx3 = document.getElementById("line-chart").getContext("2d");
+        var lineChart = new Chart(ctx3, {
+            type: "line",
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: "Assets",
+                    fill: false,
+                    backgroundColor: "rgba(0, 123, 255, 0.7)",
+                    borderColor: "rgba(0, 123, 255, 1)",
+                    data: asl
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+
+        // Computer stock analysis chart
+        var ctx2 = document.getElementById("computer-chart").getContext("2d");
+        var computerChart = new Chart(ctx2, {
+            type: "line",
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: "Computer",
+                    data: coml,
+                    backgroundColor: "rgba(220, 53, 69, 0.2)",
+                    borderColor: "rgba(220, 53, 69, 1)",
+                    fill: true
+                },
+                {
+                    label: "Return Computer",
+                    data: retcoml,
+                    backgroundColor: "rgba(40, 167, 69, 0.2)",
+                    borderColor: "rgba(40, 167, 69, 1)",
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+
+        // Laptop stock analysis chart
+        var ctxLaptop = document.getElementById("laptop-chart").getContext("2d");
+        var laptopChart = new Chart(ctxLaptop, {
+            type: "line",
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: "Laptop",
+                    data: lapl,
+                    backgroundColor: "rgba(255, 193, 7, 0.2)",
+                    borderColor: "rgba(255, 193, 7, 1)",
+                    fill: true
+                },
+                {
+                    label: "Return Laptop",
+                    data: retlapl,
+                    backgroundColor: "rgba(23, 162, 184, 0.2)",
+                    borderColor: "rgba(23, 162, 184, 1)",
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+
+        // Other accessories analysis chart
+        var ctxOther = document.getElementById("other-chart").getContext("2d");
+        var otherChart = new Chart(ctxOther, {
+            type: "line",
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: "Other Accessories",
+                    data: otherl,
+                    backgroundColor: "rgba(111, 66, 193, 0.2)",
+                    borderColor: "rgba(111, 66, 193, 1)",
+                    fill: true
+                },
+                {
+                    label: "Return Other Accessories",
+                    data: retotherl,
+                    backgroundColor: "rgba(253, 126, 20, 0.2)",
+                    borderColor: "rgba(253, 126, 20, 1)",
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+
+        // PDF export functionality
+        document.getElementById("downloadPDF").addEventListener("click", function() {
+            // Show loading indicator
+            document.getElementById('pdf-loading').style.display = 'block';
+            
+            const { jsPDF } = window.jspdf;
+            
+            // Create a new PDF instance
+            const pdf = new jsPDF('p', 'mm', 'a4');
+            
+            // Add title
+            pdf.setFontSize(20);
+            pdf.text("Asset Management System Report", 105, 15, { align: 'center' });
+            
+            // Add date
+            pdf.setFontSize(12);
+            pdf.text("Generated on: " + new Date().toLocaleDateString(), 105, 22, { align: 'center' });
+            
+            // Add stats section
+            pdf.setFontSize(16);
+            pdf.text("Summary Statistics", 20, 35);
+            pdf.setFontSize(12);
+            pdf.text("Total Employees: " + {{ emp }}, 20, 45);
+            pdf.text("Total Computers: " + {{ com }}, 20, 55);
+            pdf.text("Total Laptops: " + {{ lap }}, 20, 65);
+            pdf.text("Total Assets: " + {{ ass }}, 20, 75);
+            
+            // Add charts section title
+            pdf.setFontSize(16);
+            pdf.text("Asset Analysis Charts", 20, 95);
+            
+            // Capture each chart and add to PDF
+            const charts = [
+                { id: 'line-chart', title: 'Assets System', yPosition: 105 },
+                { id: 'computer-chart', title: 'Computer Stock Analysis', yPosition: 0 },
+                { id: 'laptop-chart', title: 'Laptop Stock Analysis', yPosition: 0 },
+                { id: 'other-chart', title: 'Other Accessories Analysis', yPosition: 0 }
+            ];
+            
+            // Function to add a chart to PDF
+            function addChartToPDF(index) {
+                if (index >= charts.length) {
+                    // All charts processed, save the PDF
+                    pdf.save("AMS_Report.pdf");
+                    document.getElementById('pdf-loading').style.display = 'none';
+                    return;
+                }
+                
+                const chart = charts[index];
+                html2canvas(document.getElementById(chart.id)).then(canvas => {
+                    const imgData = canvas.toDataURL('image/png');
+                    
+                    // Calculate position for this chart
+                    let yPosition = (index === 0) ? 105 : charts[index-1].yPosition + charts[index-1].height + 15;
+                    
+                    // If we exceed page height, add a new page
+                    if (yPosition > 240) {
+                        pdf.addPage();
+                        yPosition = 20;
+                    }
+                    
+                    // Add chart title
+                    pdf.setFontSize(12);
+                    pdf.text(chart.title, 20, yPosition);
+                    
+                    // Add chart image
+                    const imgProps = pdf.getImageProperties(imgData);
+                    const pdfWidth = pdf.internal.pageSize.getWidth() - 40;
+                    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+                    
+                    pdf.addImage(imgData, 'PNG', 20, yPosition + 5, pdfWidth, pdfHeight);
+                    
+                    // Store position and height for next chart
+                    chart.yPosition = yPosition;
+                    chart.height = pdfHeight;
+                    
+                    // Process next chart
+                    setTimeout(() => {
+                        addChartToPDF(index + 1);
+                    }, 100);
+                });
+            }
+            
+            // Start processing charts
+            setTimeout(() => {
+                addChartToPDF(0);
+            }, 500);
+        });
+    </script>
+
+    {% load sweetify %}
+    {% sweetify %}
+</body>
+</html>
