@@ -53,7 +53,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'assestmanagementsystem.urls'
+ROOT_URLCONF = 'AMS.urls'
 
 TEMPLATES = [
     {
@@ -72,7 +72,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'assestmanagementsystem.wsgi.application'
+WSGI_APPLICATION = 'AMS.wsgi.application'
 
 
 # Database
